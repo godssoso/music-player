@@ -1,28 +1,96 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="my-music-app">
+      <!-- 播放器头部 -->
+      <div class="player-header">
+        <player-header @getSongs="handleGetSongs"></player-header>
+      </div>
+      <!-- 播放器内容区域 -->
+      <div class="player-content">
+         <player-content :songs="songs" @getSongUrl="handleGetSongUrl" @playVideo="handlePlayVideo"></player-content>
+      </div>
+      <!-- 播放器底部 -->
+      <div class="player-footer">
+         <player-footer :url="songUrl" :videoSrc="videoUrl" @stopPlay="handleStop"></player-footer>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import playerHeader from "./components/player-header"
+import playerContent from "./components/player-content"
+import playerFooter from "./components/player-footer"
+
 
 export default {
-  name: 'App',
+  name: "App",
+  methods:{
+    handleGetSongs(songs){
+      this.songs = songs;
+    },
+    handleGetSongUrl(url){
+      this.songUrl = url;
+    },
+    handlePlayVideo(src){
+      this.videoUrl = src;
+      this.songUrl = ''; //播放mv时暂停音乐
+    } ,
+    handleStop(){
+      this.videoUrl = '';
+    }
+  },
+  data(){
+    return {
+      songs:[],
+      songUrl:'',
+      videoUrl:'',
+    }
+  },
   components: {
-    HelloWorld
-  }
-}
+    playerHeader,
+    playerContent,
+    playerFooter
+  },
+};
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  width: 100vw;
+  height: 100vh;
+  background: url(./assets/images/bg.jpg) no-repeat;
+  background-size: 1920px 937px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  --themeColor: #1baad5;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.my-music-app{
+  width: 800px;
+  height: 600px;
+  border-radius: 10px;
+}
+.player-header{
+  height: 60px;
+  width: 100%;
+  background: var(--themeColor);
+}
+.player-content{
+  width: 100%;
+  height: 480px;
+  display: flex;
+  border-bottom: 1px dotted var(--themeColor);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.player-footer{
+  width: 100%;
+  height: 60px;
+  background: var(--themeColor);
 }
 </style>
