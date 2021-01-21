@@ -132,12 +132,55 @@ export default {
     },
   },
   //生命周期 - 创建完成（可以访问当前this实例）
-  created() {
-   
+  created() {   //初始数据请求，应为请求是异步的，而歌曲详情的请求要在获取歌单后才能发起，所以将详情的请求嵌套在歌单请求后的then函数中
+    this.$http.get("/search",{
+            params:{
+                keywords:'热门'
+            }
+    }).then( res => {
+        // console.log(res);
+        //console.log( res.data.result.songs);
+        // console.log(res.data.result.songs[0].id);
+        this.$emit('getSongs',res.data.result.songs);
+    }).then( () => {
+      // console.log(this.songs[0].id);
+      this.songName = this.songs[0].name;
+      this.$http
+        .get("song/url", {  //获取歌曲链接
+          params: {
+            id: this.songs[0].id,
+          },
+        })
+        .then((res) => {
+          //console.log(typeof res);
+          // console.log(res.data.data[0].url);
+          this.$emit("getSongUrl", res.data.data[0].url);
+        });
+      this.$http
+        .get("song/detail", {  //获取歌曲图片
+          params: {
+            ids: this.songs[0].id,
+          },
+        })
+        .then((res) => {
+          // console.log(res.data.songs[0].al.picUrl);
+          // this.$emit('getPicUrl',res.data.songs[0].al.picUrl)
+          this.picUrl = res.data.songs[0].al.picUrl;
+        });
+      this.$http.get('comment/hot?type=0',{ //获取评论
+        params:{
+          id: this.songs[0].id,
+        }
+      }).then( res => {
+        // console.log(res);
+        this.hotComments = res.data.hotComments;
+        // console.log(this.hotComments);
+      })
+    })
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    
+   
   },
   beforeCreate() {
   }, //生命周期 - 创建之前

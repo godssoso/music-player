@@ -44,16 +44,16 @@ methods: {
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {  //默认初始请求"热门"
-    this.$http.get("/search",{
-            params:{
-                keywords:'热门'
-            }
-    }).then( res => {
-        // console.log(res);
-        //console.log( res.data.result.songs);
-        // console.log(res.data.result.songs[0].id);
-        this.$emit('getSongs',res.data.result.songs);
-    })
+    // this.$http.get("/search",{
+    //         params:{
+    //             keywords:'热门'
+    //         }
+    // }).then( res => {
+    //     // console.log(res);
+    //     //console.log( res.data.result.songs);
+    //     // console.log(res.data.result.songs[0].id);
+    //     this.$emit('getSongs',res.data.result.songs);
+    // })
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {

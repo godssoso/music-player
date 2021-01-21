@@ -7,7 +7,7 @@
       </div>
       <!-- 播放器内容区域 -->
       <div class="player-content">
-         <player-content :songs="songs"  @getSongUrl="handleGetSongUrl" @playVideo="handlePlayVideo" :flag="animate"></player-content>
+         <player-content :songs="songs" @getSongs="handleGetSongs"  @getSongUrl="handleGetSongUrl" @playVideo="handlePlayVideo" :flag="animate"></player-content>
       </div>
       <!-- 播放器底部 -->
       <div class="player-footer">
