@@ -7,11 +7,11 @@
       </div>
       <!-- 播放器内容区域 -->
       <div class="player-content">
-         <player-content :songs="songs" @getSongUrl="handleGetSongUrl" @playVideo="handlePlayVideo"></player-content>
+         <player-content :songs="songs"  @getSongUrl="handleGetSongUrl" @playVideo="handlePlayVideo" :flag="animate"></player-content>
       </div>
       <!-- 播放器底部 -->
       <div class="player-footer">
-         <player-footer :url="songUrl" :videoSrc="videoUrl" @stopPlay="handleStop"></player-footer>
+         <player-footer :url="songUrl" :videoSrc="videoUrl" @stopPlay="handleStop" @songStop="handleSongStop" @songStart="handleSongStart"></player-footer>
       </div>
     </div>
   </div>
@@ -28,16 +28,24 @@ export default {
   methods:{
     handleGetSongs(songs){
       this.songs = songs;
+      // this.firstID = firstID;
+      // console.log(this.firstID);
     },
     handleGetSongUrl(url){
       this.songUrl = url;
     },
     handlePlayVideo(src){
       this.videoUrl = src;
-      this.songUrl = ''; //播放mv时暂停音乐
+      document.querySelector('audio').pause();//播放mv时暂停音乐
     } ,
     handleStop(){
       this.videoUrl = '';
+    },
+    handleSongStop(){
+      this.animate = false;
+    },
+    handleSongStart(){
+      this.animate = true;
     }
   },
   data(){
@@ -45,6 +53,7 @@ export default {
       songs:[],
       songUrl:'',
       videoUrl:'',
+      animate:false
     }
   },
   components: {

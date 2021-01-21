@@ -4,8 +4,8 @@
     <div class="content-left">
       <div class="songList-box">
         <div class="list" v-for="item in songs" :key="item.id">
-          <div class="songList-left" @click="playSong(item.id)"></div>
-          <div class="songList-center">{{ item.name }}</div>
+          <div class="songList-left" @click="playSong(item.id,item.name)"></div>
+          <div class="songList-center"  @click="playSong(item.id,item.name)">{{ item.name }}</div>
           <div
             :class="[
               'songList-right',
@@ -17,16 +17,18 @@
       </div>
     </div>
     <div class="content-center">
+      <!-- 唱片的动画效果由歌曲是否播放的状态决定 -->
+      <p>{{ songName }}</p>
       <img
         src="../assets/images/player_bar.png"
         alt=""
-        :class="['bar', { playing: picUrl.length }]"
+        :class="['bar', {playing:flag}]"
       />
       <img :src="picUrl" alt="" class="detail" />
       <img
         src="../assets/images/disc.png"
         alt=""
-        :class="['disc', { moving: picUrl.length }]"
+        :class="['disc', { moving:flag}]"   
       />
     </div>
     <div class="content-right">
@@ -56,8 +58,12 @@ export default {
       type: Array,
       default: function () {
         return [];
-      },
+      }
     },
+    flag:{
+      type:Boolean,
+      default:false
+    }
   },
   //import引入的组件需要注入到对象中才能使用
   components: {},
@@ -65,8 +71,8 @@ export default {
     //这里存放数据
     return {
       picUrl: "",
-      photoSrc:'',
-      hotComments:[]
+      hotComments:[],
+      songName:''
     };
   },
   //监听属性 类似于data概念
@@ -75,8 +81,10 @@ export default {
   watch: {},
   //方法集合
   methods: {
-    playSong(id) {
-      // console.log(item);
+    playSong(id,name) {
+      // console.log(this.songs[0]);
+      // console.log(id);
+      this.songName = name;
       this.$http
         .get("song/url", {  //获取歌曲链接
           params: {
@@ -106,7 +114,7 @@ export default {
       }).then( res => {
         // console.log(res);
         this.hotComments = res.data.hotComments;
-        console.log(this.hotComments);
+        // console.log(this.hotComments);
       })
     },
     getVideoSrc(mvid) {
@@ -124,13 +132,23 @@ export default {
     },
   },
   //生命周期 - 创建完成（可以访问当前this实例）
-  created() {},
+  created() {
+   
+  },
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
-  beforeCreate() {}, //生命周期 - 创建之前
-  beforeMount() {}, //生命周期 - 挂载之前
-  beforeUpdate() {}, //生命周期 - 更新之前
-  updated() {}, //生命周期 - 更新之后
+  mounted() {
+    
+  },
+  beforeCreate() {
+  }, //生命周期 - 创建之前
+  beforeMount() {
+    
+  }, //生命周期 - 挂载之前
+  beforeUpdate() {
+    
+  }, //生命周期 - 更新之前
+  updated() {
+  }, //生命周期 - 更新之后
   beforeDestroy() {}, //生命周期 - 销毁之前
   destroyed() {}, //生命周期 - 销毁完成
   activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
@@ -173,6 +191,7 @@ export default {
           text-overflow: ellipsis;
           text-align: center;
           line-height: 30px;
+          cursor: pointer;
         }
 
         .songList-right {
@@ -193,6 +212,17 @@ export default {
     height: 479px;
     position: relative;
     border-right: 1px dotted var(--themeColor);
+    p{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width:100%;
+      text-align: center;
+      font-size: 36px;
+      font-style: italic;
+      color: #fff;
+
+    }
     .bar {
       left: 200px;
       position: absolute;

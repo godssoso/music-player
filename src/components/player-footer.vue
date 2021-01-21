@@ -1,7 +1,7 @@
 <!-- 播放器底部 -->
 <template>
 <div class='footer'>
-   <audio :src="url" controls loop autoplay></audio>
+   <audio :src="url" controls loop autoplay @pause="handlePause" @play="handlePlay"></audio>
    <div class="video-box" v-show="videoSrc">
      <div class="close" @click="closeVideo">X</div>
      <video :src="videoSrc" controls autoplay loop></video>
@@ -41,6 +41,14 @@ watch: {},
 methods: {
   closeVideo(){
     this.$emit('stopPlay')
+  },
+  handlePause(){
+    // console.log(111);
+    this.$emit('songStop');
+  },
+  handlePlay(){
+    // console.log(222);
+    this.$emit('songStart')
   }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
@@ -68,6 +76,7 @@ div.footer {
     width: 100%;
     height: 100%;
     background-color: white;
+    outline: none;
   }
   .video-box{
     .close{
@@ -86,6 +95,7 @@ div.footer {
       position: fixed;
       z-index: 999;
       top: 50%;
+      outline: none;
     }
     .video-mask{
       position: fixed;
